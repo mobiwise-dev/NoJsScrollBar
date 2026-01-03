@@ -14,6 +14,9 @@ No JavaScript is used to track, compute, or animate scroll progress.
 ## ✨ Demo
 
 👉 Live demo on CodePen  
+**https://nojsscrollbar.mobiwise.dev**
+
+👉 Live demo on CodePen  
 **https://codepen.io/mobiwise/pen/pvbjwYv**
 
 ---
