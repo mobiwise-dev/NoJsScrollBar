@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS-Only Scroll Progress Bar – No JavaScript | MobiWise.dev</title>
+
+    <meta name="description" content="CSS-only scroll progress bar using scroll-driven animations, typed custom properties (Houdini), and CSS counters. No JavaScript required." />
+    <style>
+      @layer reset, base, components, utilities;
+
+      @property --scroll {
+        syntax: "<number>";
+        inherits: false;
+        initial-value: 0;
+      }
+
+      #progress-bar {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 1000;
+        height: 0.33rem;
+        background: linear-gradient(to right, blue calc(var(--scroll) * 1%), transparent 0);
+      }
+
+      #scroll-indicator {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        color: white;
+        border-radius: 1.4rem;
+        background: rgba(0, 0, 0, 0.8);
+        &::before {
+          content: counter(scroll-value) "%";
+          counter-reset: scroll-value calc(var(--scroll));
+        }
+      }
+
+      #progress-bar,
+      #scroll-indicator::before {
+        animation: scroll-progress linear both;
+        animation-timeline: scroll(root);
+      }
+
+      @layer utilities {
+        @supports not (animation-timeline: scroll(root)) {
+          body:before {
+            content: "😬 Sorry Firefox users, this doesn't work for you.";
+            font-size: 25px;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+          }
+          #progress-bar,
+          #scroll-indicator {
+            display: none;
+          }
+          section {
+            display: none;
+          }
+        }
+      }
+
+      @keyframes scroll-progress {
+        from {
+          --scroll: 0;
+        }
+        to {
+          --scroll: 100;
+        }
+      }
+
+      @layer reset {
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+      }
+
+      @layer base {
+        @property --bg-color {
+          syntax: "<color>";
+          inherits: false;
+          initial-value: oklch(0.21 0.03 265);
+        }
+        @property --grid-color {
+          syntax: "<color>";
+          inherits: false;
+          initial-value: oklch(1 0 0 / 0.05);
+        }
+        @property --color {
+          syntax: "<color>";
+          inherits: false;
+          initial-value: oklch(0.87 0.12 81);
+        }
+        body {
+          min-height: 100dvh;
+          font-family: Arial, sans-serif;
+          font-size: 1.5rem;
+          color: oklch(from var(--bg-color) 0.8 c h);
+          background-color: var(--bg-color);
+          background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px), linear-gradient(var(--grid-color) 2px, transparent 2px),
+            linear-gradient(90deg, var(--grid-color) 2px, transparent 2px);
+          background-size: 10px 10px, 10px 10px, 100px 100px, 100px 100px;
+        }
+
+        h1 {
+          font-size: 4rem;
+          font-weight: 900;
+          text-align: center;
+          color: white;
+          & span {
+            font-size: clamp(2rem, 15vw, 8rem);
+            color: var(--color);
+            -webkit-text-stroke: 1px white;
+            text-shadow: 0.25rem -0.25rem 0.375rem oklch(from var(--bg-color) l c h / 0.1);
+            &:hover {
+              text-decoration: line-through;
+            }
+          }
+        }
+
+        h2 {
+          font-size: 3rem;
+          text-align: center;
+          color: white;
+          margin-bottom: 1rem;
+        }
+        p {
+          margin: 1rem 0;
+        }
+        b {
+          color: white;
+        }
+        code {
+          color: white;
+          background-color: black;
+        }
+        main {
+          max-width: 50rem;
+          margin: 0 auto;
+        }
+
+        section {
+          min-height: 100vh;
+          padding: 2rem 1rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        footer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          p {
+            display: inline-block;
+            font-size: 0.8rem;
+            text-align: center;
+            a {
+              color: inherit;
+              text-decoration: none;
+              &:hover {
+                color: white;
+              }
+            }
+          }
+        }
+      }
+
+      @layer components {
+        #logo {
+          position: fixed;
+          top: 2rem;
+          left: 2rem;
+          height: 6vh;
+          aspect-ratio: 0.587;
+          background-color: oklch(from var(--bg-color) 0.8 c h);
+          clip-path: shape(
+            from 97.41% 41.31%,
+            arc by 2.59% 1.52% of 2.59% 1.52% small cw,
+            vline by 55.65%,
+            curve by -4.42% 1.08% with 0% 1.35%/-2.79% 2.03%,
+            line to 0.76% 43.9%,
+            curve to 2.6% 41.31% with -0.87% 42.95%/0.29% 41.31%,
+            hline to 97.41%,
+            close,
+            move to 45.6% 74.32%,
+            curve by 4.42% 1.08% with 1.63% -0.96%/4.42% -0.28%,
+            vline to 87.59%,
+            arc by -2.59% 1.52% of 2.59% 1.52% small cw,
+            hline to 26.66%,
+            curve by -1.83% -2.6% with -2.31% 0%/-3.47% -1.64%,
+            line by 20.77% -12.19%,
+            close,
+            move to 90.02% 0.45%,
+            curve by 4.42% 1.08% with 1.63% -0.96%/4.42% -0.28%,
+            vline by 8.73%,
+            arc by -0.76% 1.08% of 2.59% 1.52% small cw,
+            line by -41.83% 24.55%,
+            arc by -3.66% 0% of 2.59% 1.52% small cw,
+            line by -41.83% -24.55%,
+            arc to 5.6% 10.26% of -6.62% -4.97% small cw,
+            vline to 1.52%,
+            curve by 4.42% -1.08% with 0% -1.36%/2.79% -2.03%,
+            line by 17.03% 10%,
+            arc by 1.83% 0.45% of 2.59% 1.52% small ccw,
+            hline by 42.28%,
+            arc by 1.83% -0.45% of 2.59% 1.52% small ccw,
+            line by 17.03% -10%,
+            close,
+            move to 13% 23.25%,
+            curve by 4.42% -1.08% with 0% -1.35%/2.79% -2.03%,
+            line by 13.36% 7.84%,
+            curve by -1.83% 2.6% with 1.63% 0.96%/0.48% 2.6%,
+            hline by -13.36%,
+            arc by -2.59% -1.52% of 2.59% 1.52% small cw,
+            vline by -7.84%,
+            close,
+            move to 82.62% 22.18%,
+            curve by 4.42% 1.08% with 1.63% -0.96%/4.42% -0.28%,
+            vline to 31.1%,
+            arc by -2.59% 1.52% of 2.59% 1.52% small cw,
+            hline by -13.37%,
+            curve by -1.83% -2.6% with -2.31% 0%/-3.46% -1.64%,
+            line by 13.37% -7.84%,
+            close
+          );
+        }
+
+        #mouse {
+          position: fixed;
+          bottom: 5vh;
+          right: 5vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.7rem;
+          .mouse-scroll {
+            position: relative;
+            width: 1.5rem;
+            height: 2.5rem;
+            border: 0.15rem solid white;
+            border-radius: 2rem;
+            &::before {
+              content: "";
+              position: absolute;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 0.4em;
+              height: 0.4em;
+              border-radius: 50%;
+              background: white;
+              animation: scroller 1.5s infinite;
+            }
+          }
+          p {
+            margin: 0 0.6rem;
+            text-align: right;
+          }
+        }
+
+        @keyframes scroller {
+          0% {
+            bottom: 80%;
+            opacity: 1;
+          }
+          100% {
+            bottom: 50%;
+            opacity: 0;
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="progress-bar"></div>
+    <div id="scroll-indicator"></div>
+    <div id="mouse">
+      <p>Scroll down<br />to see<br />the magic</p>
+      <div class="mouse-scroll"></div>
+    </div>
+
+    <a id="logo" href="https://mobiwise.dev" target="_blank" rel="author" title="visit mobiwise.dev" aria-label="link to mobiwise.dev" data-text="MobiWise.dev"></a>
+
+    <main>
+      <section>
+        <h1>Progress bar without <span data-depth="1.5rem" data-depth-layers="20" data-depth-event="pointer" data-depth-event-rotation="15deg">JavaScript</span></h1>
+      </section>
+
+      <section>
+        <h2>Scroll Progress Bar - CSS only (with scroll-driven animations)</h2>
+        <p>This demo shows how to build a scroll progress bar entirely in CSS, using scroll-driven animations <code>animation-timeline: scroll()</code>, custom properties, and no JavaScript for the progress itself.</p>
+        <p>The progress bar at the top of the page is driven by a CSS custom property <code>--scroll</code> that animates from <code>0</code> to <code>100</code> as the document scrolls.</p>
+        <p>This value is then reused to dynamically update the bar’s gradient; all handled by the browser’s animation engine.</p>
+      </section>
+
+      <section>
+        <h2>What’s CSS-only here</h2>
+        <ul>
+          <li>Scroll position tracking via <code>animation-timeline: scroll(root)</code></li>
+          <li>Progress calculation using a typed custom property <code>@property</code></li>
+          <li>Smooth, performant updates handled natively by CSS</li>
+          <li>No JavaScript involved in computing or animating the progress bar</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>About the percentage counter</h2>
+
+        <p>Displaying a live numeric value in pure CSS has long been considered difficult, especially when the value is driven by animations.</p>
+
+        <p>
+          This demo uses a modern CSS approach combining typed custom properties
+          <code>@property</code> and CSS counters to display the scroll percentage without JavaScript.
+        </p>
+
+        <ul>
+          <li>The scroll position animates a numeric CSS variable <code>--scroll</code></li>
+          <li>The variable is typed and interpolated using CSS Houdini</li>
+          <li>A CSS counter converts the numeric value into readable text</li>
+          <li>The displayed value is an integer approximation (0–100)</li>
+        </ul>
+
+        <p>This technique relies on very recent CSS features and is currently supported only in modern Chromium-based browsers and Safari.</p>
+
+        <p>
+          <b> In production environments, JavaScript is still the most robust solution for dynamic numeric text — but this demo shows what modern CSS can already do. </b>
+        </p>
+      </section>
+
+      <section>
+        <h2>Takeaway</h2>
+        <ul>
+          <li>Modern CSS can track scroll position without JavaScript</li>
+          <li>Typed custom properties enable real numeric interpolation</li>
+          <li>CSS counters can expose animated values as readable text</li>
+          <li>JavaScript remains the best choice for full cross-browser support</li>
+        </ul>
+        <p>This pen explores the current frontier of what CSS can do today, without polyfills, hacks, or misleading shortcuts.</p>
+      </section>
+
+      <footer>
+        <p>
+          © 2026
+          <a class="link" href="https://mobiwise.dev" target="_blank" rel="author" title="visit mobiwise.dev" aria-label="link to mobiwise.dev" data-text="MobiWise.dev">MobiWise.dev</a>
+        </p>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/depthtext@1.2.0/dist/depthtext.global.js"></script>
+  </body>
+</html>
