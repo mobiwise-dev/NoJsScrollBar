@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CSS-Only Scroll Progress Bar – No JavaScript | MobiWise.dev</title>
+    <title>Scroll Progress Bar – Puce CSS (No JavaScript) | MobiWise.dev</title>
 
     <!-- Primary SEO -->
     <meta name="description" content="CSS-only scroll progress bar using scroll-driven animations, typed custom properties (CSS Houdini), and CSS counters. No JavaScript required." />
@@ -123,9 +123,14 @@
           font-size: 1.5rem;
           color: oklch(from var(--bg-color) 0.8 c h);
           background-color: var(--bg-color);
-          background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px), linear-gradient(var(--grid-color) 2px, transparent 2px),
+          background-image:
+            linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px), linear-gradient(var(--grid-color) 2px, transparent 2px),
             linear-gradient(90deg, var(--grid-color) 2px, transparent 2px);
-          background-size: 10px 10px, 10px 10px, 100px 100px, 100px 100px;
+          background-size:
+            10px 10px,
+            10px 10px,
+            100px 100px,
+            100px 100px;
         }
 
         h1 {
@@ -348,7 +353,7 @@
 
     <main>
       <section>
-        <h1>Progress bar without <span data-depth="1.5rem" data-depth-layers="20" data-depth-event="pointer" data-depth-event-rotation="15deg">JavaScript</span></h1>
+        <h1>Scroll Progress Bar without <span data-depth="1.5rem" data-depth-layers="20" data-depth-event="pointer" data-depth-event-rotation="15deg">JavaScript</span></h1>
       </section>
 
       <section>
